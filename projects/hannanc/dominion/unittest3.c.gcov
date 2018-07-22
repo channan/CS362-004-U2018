@@ -1,0 +1,89 @@
+        -:    0:Source:unittest3.c
+        -:    0:Graph:unittest3.gcno
+        -:    0:Data:unittest3.gcda
+        -:    0:Runs:28
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include "rngs.h"
+        -:    6:
+        -:    7:// global count of test failures
+        -:    8:int failureCount = 0;
+        -:    9:int testCount = 0;
+        -:   10:
+        -:   11:// function to check if two ints are equal or not
+function assertTrue called 84 returned 100% blocks executed 80%
+        -:   12:void assertTrue(int a, int b) {
+       84:   13:    if (a == b) {
+branch  0 taken 100%
+branch  1 taken 0%
+       84:   14:        printf("PASSED\n");
+       84:   15:        testCount++;
+       84:   16:    }
+        -:   17:    else {
+    #####:   18:        printf("FAILED\n");
+    #####:   19:        failureCount++;
+    #####:   20:        testCount++;
+        -:   21:    }
+       84:   22:}
+        -:   23:
+        -:   24:// runs the tests
+function main called 28 returned 100% blocks executed 75%
+        -:   25:int main () {
+       28:   26:    int numPlayers = 2;
+       28:   27:    int player = 0;
+        -:   28:
+        -:   29:    // kingdom cards
+       28:   30:    int k[10] = {adventurer, council_room, feast, gardens, mine,
+        -:   31:               remodel, smithy, village, baron, great_hall};
+       28:   32:    int seed = 2000;
+        -:   33:    struct gameState state;
+        -:   34:
+       28:   35:    printf("Starting tests for shuffle()...\n");
+       28:   36:    memset(&state,23,sizeof(struct gameState));
+       28:   37:    initializeGame(numPlayers, k, seed, &state);
+        -:   38:
+       28:   39:    state.deckCount[player] = 0;
+       28:   40:    printf("\nTEST: Player deck count is 0\n");
+       28:   41:    printf("Actual: %d\n",shuffle(player,&state));
+       28:   42:    printf("Expected: %d\n",-1);
+       28:   43:    assertTrue(shuffle(player,&state),-1);
+        -:   44:
+       28:   45:    printf("\nTEST: Player deck count is 10 before and after shuffle\n");
+       28:   46:    state.deckCount[player] = 10;
+       28:   47:    shuffle(player,&state);
+       28:   48:    printf("Actual: %d\n",state.deckCount[player]);
+       28:   49:    printf("Expected: %d\n",10);
+       28:   50:    assertTrue(state.deckCount[player],10);
+        -:   51:
+       28:   52:    printf("\nTEST: Cards are shuffled\n");
+       28:   53:    int pre_shuffle_card = state.deck[player][0];
+       28:   54:    shuffle(player,&state);
+       28:   55:    int post_shuffle_card = state.deck[player][0];
+       28:   56:    if (pre_shuffle_card != post_shuffle_card) {
+branch  0 taken 100%
+branch  1 taken 0%
+       28:   57:        printf("Actual: %d\n",1);
+       28:   58:        printf("Expected: %d\n",1);
+       28:   59:        assertTrue(1,1);
+       28:   60:    }
+        -:   61:    else {
+    #####:   62:        printf("Actual: %d\n",0);
+    #####:   63:        printf("Expected: %d\n",1);
+    #####:   64:        assertTrue(0,1);
+        -:   65:    }
+        -:   66:
+       28:   67:    if (failureCount) {
+branch  0 taken 0%
+branch  1 taken 100%
+    #####:   68:        printf("\nTEST(S) FAILED\n");
+    #####:   69:        printf("%d of %d tests failed!\n",failureCount,testCount);
+    #####:   70:    }
+        -:   71:    else {
+       28:   72:        printf("\nTESTS SUCCESSFULLY COMPLETED\n\n");
+        -:   73:    }
+        -:   74:
+       28:   75:    return 0;
+        -:   76:}

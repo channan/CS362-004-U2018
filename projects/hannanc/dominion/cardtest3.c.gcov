@@ -1,0 +1,128 @@
+        -:    0:Source:cardtest3.c
+        -:    0:Graph:cardtest3.gcno
+        -:    0:Data:cardtest3.gcda
+        -:    0:Runs:28
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include "rngs.h"
+        -:    6:
+        -:    7://test and failure counters
+        -:    8:int failureCount = 0;
+        -:    9:int testCount = 0;
+        -:   10:
+        -:   11://replaces assert
+function assertTrue called 504 returned 100% blocks executed 100%
+        -:   12:void assertTrue(int a, int b) {
+      504:   13:    if (a == b) {
+branch  0 taken 78%
+branch  1 taken 22%
+      392:   14:        printf("PASSED\n");
+      392:   15:        testCount++;
+      392:   16:    }
+        -:   17:    else {
+      112:   18:        printf("FAILED\n");
+      112:   19:        failureCount++;
+      112:   20:        testCount++;
+        -:   21:    }
+      504:   22:}
+        -:   23:
+        -:   24://starts tests
+function main called 28 returned 100% blocks executed 88%
+        -:   25:int main () {
+        -:   26:    
+        -:   27:    //sets up game
+        -:   28:    int i;
+       28:   29:    int numPlayers = 2;
+       28:   30:    int player0 = 0;
+       28:   31:    int player1 = 1;
+        -:   32:
+       28:   33:    int handpos = 0;
+       28:   34:    int choice1 = 0, choice2 = 0, choice3 = 0;
+       28:   35:    int bonus = 0;
+        -:   36:
+       28:   37:    int k[10] = {adventurer, council_room, feast, gardens, mine,
+        -:   38:               remodel, smithy, village, baron, great_hall};
+        -:   39:
+       28:   40:    int seed = 2000;
+        -:   41:    
+        -:   42:    //multiples game structs for comparison
+        -:   43:    struct gameState state, originalState;
+        -:   44:
+       28:   45:    printf("Starting tests for councilRoomEffect()...\n");
+       28:   46:    memset(&state,23,sizeof(struct gameState));
+       28:   47:    memset(&originalState,23,sizeof(struct gameState));
+        -:   48:
+        -:   49:    //starts game
+       28:   50:    initializeGame(numPlayers, k, seed, &state);
+        -:   51:
+        -:   52:    //copies for comparison
+       28:   53:    memcpy(&originalState, &state, sizeof(struct gameState));
+        -:   54:
+        -:   55:    //call function
+       28:   56:    cardEffect(council_room, choice1, choice2, choice3, &state, handpos, &bonus);
+        -:   57:
+       28:   58:    printf("\nTEST: Player 0 gains 4 cards\n");
+       28:   59:    printf("Actual: %d\n",state.handCount[player0]);
+       28:   60:    printf("Expected: %d\n",originalState.handCount[player0]+3);
+       28:   61:    assertTrue(state.handCount[player0],originalState.handCount[player0]+3);
+        -:   62:
+       28:   63:    printf("\nTEST: Player 0 gains 4 cards from his own pile\n");
+       28:   64:    printf("Actual: %d\n",state.deckCount[player0]);
+       28:   65:    printf("Expected: %d\n",originalState.deckCount[player0]-4);
+       28:   66:    assertTrue(state.deckCount[player0],originalState.deckCount[player0]-4);
+        -:   67:
+       28:   68:    printf("\nTEST: Player 0 number of buys increments\n");
+       28:   69:    printf("Actual: %d\n",state.numBuys);
+       28:   70:    printf("Expected: %d\n",originalState.numBuys+1);
+       28:   71:    assertTrue(state.numBuys,originalState.numBuys+1);
+        -:   72:
+       28:   73:    printf("\nTEST: No change to victory card piles\n");
+        -:   74:    
+       28:   75:    printf("Province Pile\n");
+       28:   76:    printf("Actual: %d\n",state.supplyCount[province]);
+       28:   77:    printf("Expected: %d\n",originalState.supplyCount[province]);
+       28:   78:    assertTrue(state.supplyCount[province],originalState.supplyCount[province]);
+        -:   79:    
+       28:   80:    printf("\nDuchy Pile\n");
+       28:   81:    printf("Actual: %d\n",state.supplyCount[duchy]);
+       28:   82:    printf("Expected: %d\n",originalState.supplyCount[duchy]);
+       28:   83:    assertTrue(state.supplyCount[duchy],originalState.supplyCount[duchy]);
+        -:   84:    
+       28:   85:    printf("\nEstate Pile\n");
+       28:   86:    printf("Actual: %d\n",state.supplyCount[estate]);
+       28:   87:    printf("Expected: %d\n",originalState.supplyCount[estate]);
+       28:   88:    assertTrue(state.supplyCount[estate],originalState.supplyCount[estate]);
+        -:   89:
+       28:   90:    printf("\nTEST: No change to kingdom card piles\n");
+      616:   91:    for (i = 0; i < 10; i++) {
+branch  0 taken 91%
+branch  1 taken 9%
+      280:   92:        printf("checking card piles...\n");
+      280:   93:        assertTrue(state.supplyCount[k[i]],originalState.supplyCount[k[i]]);
+      280:   94:    }
+        -:   95:
+       28:   96:    printf("\nTEST: Player 1 gains a card\n");
+       28:   97:    printf("Actual: %d\n",state.handCount[player1]);
+       28:   98:    printf("Expected: %d\n",originalState.handCount[player1]+1);
+       28:   99:    assertTrue(state.handCount[player1],originalState.handCount[player1]+1);
+        -:  100:    
+       28:  101:    printf("\nTEST: Player 1 gains a card from his own deck\n");
+       28:  102:    printf("Actual: %d\n",state.deckCount[player1]);
+       28:  103:    printf("Expected: %d\n",originalState.deckCount[player1]-1);
+       28:  104:    assertTrue(state.deckCount[player1],originalState.deckCount[player1]-1);
+        -:  105:
+       28:  106:    if (failureCount) {
+branch  0 taken 100%
+branch  1 taken 0%
+       28:  107:        printf("\nTEST(S) FAILED\n");
+       28:  108:        printf("%d of %d tests failed!\n",failureCount,testCount);
+       28:  109:    }
+        -:  110:    else {
+    #####:  111:        printf("\nTESTS SUCCESSFULLY COMPLETED\n\n");
+        -:  112:    }
+        -:  113:
+       28:  114:    return 0;
+        -:  115:}
