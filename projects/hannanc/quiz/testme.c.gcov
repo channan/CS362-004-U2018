@@ -1,8 +1,8 @@
         -:    0:Source:testme.c
         -:    0:Graph:testme.gcno
-        -:    0:Data:-
-        -:    0:Runs:0
-        -:    0:Programs:0
+        -:    0:Data:testme.gcda
+        -:    0:Runs:4
+        -:    0:Programs:1
         -:    1:#include<stdio.h>
         -:    2:#include<string.h>
         -:    3:#include<stdlib.h>
@@ -10,55 +10,55 @@
         -:    5:
         -:    6:void inputChar(char* character)
         -:    7:{
-        -:    8:    //selects random characters between 'Space' and '~' from ASCII table
-    #####:    9:    int min = 32; // 'Space'
-    #####:   10:    int max = 126; // '~'
-    #####:   11:    int delta = max - min;
-    #####:   12:    *character = (rand() % (delta + 1)) + min;
-    #####:   13:}
+        -:    8:    //generates a random charater between 'Space' and '~' from the ASCII table
+ 18809009:    9:    int min = 32; // 'Space'
+ 18809009:   10:    int max = 126; // '~'
+ 18809009:   11:    int delta = max - min;
+ 18809009:   12:    *character = (rand() % (delta + 1)) + min;
+ 18809009:   13:}
         -:   14:
         -:   15:void inputString(char string[])
         -:   16:{
-        -:   17:    //selects random characters between 'a' and 'z' from ASCII table
-    #####:   18:    int min = 97; // 'a'
-    #####:   19:    int max = 122; // 'z'
-    #####:   20:    int delta = max - min;
+        -:   17:    //generate a random 5 char string containing 'a' and 'z' from the ASCII table
+ 18809009:   18:    int min = 101; // 'e'
+ 18809009:   19:    int max = 116; // 't'
+ 18809009:   20:    int delta = max - min;
         -:   21:    int i;
-    #####:   22:    for (i = 0; i < 5; i++) {
-    #####:   23:        string[i] = (rand() % (delta + 1)) + min;
-    #####:   24:    }
-    #####:   25:}
+225708108:   22:    for (i = 0; i < 5; i++) {
+ 94045045:   23:        string[i] = (rand() % (delta + 1)) + min;
+ 94045045:   24:    }
+ 18809009:   25:}
         -:   26:
         -:   27:void testme()
         -:   28:{
-    #####:   29:  int tcCount = 0;
-    #####:   30:  char s[] = "tempy";
+        8:   29:  int tcCount = 0;
+        4:   30:  char s[] = "reset";
         -:   31:  char c;
-    #####:   32:  char *cPtr = &c;
-    #####:   33:  int state = 0;
-    #####:   34:  while (1)
+        4:   32:  char *cPointer = &c;
+        4:   33:  int state = 0;
+ 18809009:   34:  while (1)
         -:   35:  {
-    #####:   36:    tcCount++;
-    #####:   37:    inputChar(cPtr);
-    #####:   38:    inputString(s);
-    #####:   39:    printf("Iteration %d: c = %c, s = %s, state = %d\n", tcCount, c, s, state);
+ 18809009:   36:    tcCount++;
+ 18809009:   37:    inputChar(cPointer);
+ 18809009:   38:    inputString(s);
+ 18809009:   39:    printf("Iteration %d: c = %c, s = %s, state = %d\n", tcCount, c, s, state);
         -:   40:
-    #####:   41:    if (c == '[' && state == 0) state = 1;
-    #####:   42:    if (c == '(' && state == 1) state = 2;
-    #####:   43:    if (c == '{' && state == 2) state = 3;
-    #####:   44:    if (c == ' '&& state == 3) state = 4;
-    #####:   45:    if (c == 'a' && state == 4) state = 5;
-    #####:   46:    if (c == 'x' && state == 5) state = 6;
-    #####:   47:    if (c == '}' && state == 6) state = 7;
-    #####:   48:    if (c == ')' && state == 7) state = 8;
-    #####:   49:    if (c == ']' && state == 8) state = 9;
-    #####:   50:    if (s[0] == 'r' && s[1] == 'e'
-    #####:   51:       && s[2] == 's' && s[3] == 'e'
-    #####:   52:       && s[4] == 't' && s[5] == '\0'
-    #####:   53:       && state == 9)
+ 19007280:   41:    if (c == '[' && state == 0) state = 1;
+ 19006457:   42:    if (c == '(' && state == 1) state = 2;
+ 19006963:   43:    if (c == '{' && state == 2) state = 3;
+ 19007337:   44:    if (c == ' '&& state == 3) state = 4;
+ 19007301:   45:    if (c == 'a' && state == 4) state = 5;
+ 19007274:   46:    if (c == 'x' && state == 5) state = 6;
+ 19007347:   47:    if (c == '}' && state == 6) state = 7;
+ 19007365:   48:    if (c == ')' && state == 7) state = 8;
+ 19006139:   49:    if (c == ']' && state == 8) state = 9;
+ 19546570:   50:    if (s[0] == 'r' && s[1] == 'e'
+   768353:   51:       && s[2] == 's' && s[3] == 'e'
+     1249:   52:       && s[4] == 't' && s[5] == '\0'
+        8:   53:       && state == 9)
         -:   54:    {
-    #####:   55:      printf("error ");
-    #####:   56:      exit(200);
+        4:   55:      printf("error ");
+        4:   56:      exit(200);
         -:   57:    }
         -:   58:  }
     #####:   59:}
@@ -66,7 +66,7 @@
         -:   61:
         -:   62:int main(int argc, char *argv[])
         -:   63:{
-    #####:   64:    srand(time(NULL));
-    #####:   65:    testme();
-    #####:   66:    return 0;
+        4:   64:    srand(time(NULL));
+        4:   65:    testme();
+        4:   66:    return 0;
         -:   67:}
