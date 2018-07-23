@@ -14,7 +14,7 @@ void inputChar(char* character)
 
 void inputString(char string[])
 {
-    //generate a random 5 char string containing 'a' and 'z' from the ASCII table
+    //generate a random 5 char string containing 'e' and 't' from the ASCII table
     int min = 101; // 'e'
     int max = 116; // 't'
     int delta = max - min;
