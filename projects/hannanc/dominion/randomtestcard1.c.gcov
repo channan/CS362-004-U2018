@@ -1,0 +1,174 @@
+        -:    0:Source:randomtestcard1.c
+        -:    0:Graph:randomtestcard1.gcno
+        -:    0:Data:randomtestcard1.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include "rngs.h"
+        -:    4:#include <string.h>
+        -:    5:#include <stdlib.h>
+        -:    6:#include <assert.h>
+        -:    7:#include <stdio.h>
+        -:    8:#include <time.h>
+        -:    9:#include <math.h>
+        -:   10:
+        -:   11://fail counters
+        -:   12:int cardEffectFails = 0;
+        -:   13:int discardCardFails = 0;
+        -:   14:int drawCardFails = 0;
+        -:   15:int deckHandCountFails = 0;
+        -:   16:
+        -:   17:void checkSmithyEffect(int p, struct gameState *post);
+        -:   18:
+function main called 1 returned 100% blocks executed 92%
+        -:   19:int main ()
+        -:   20:{
+        1:   21:    printf("RANDOM TEST - smithyEffect()\n");
+        -:   22:
+        1:   23:    int iterations = 10000;
+        -:   24:    int i, n, player;
+        -:   25:    struct gameState G;
+        1:   26:    srand(time(NULL));
+        -:   27:
+        -:   28:    //randomly inits a gamestate
+    20002:   29:    for (n = 0; n < iterations; n++)
+branch  0 taken 99%
+branch  1 taken 1%
+        -:   30:    {
+526020000:   31:        for (i = 0; i < sizeof(struct gameState); i++)
+branch  0 taken 99%
+branch  1 taken 1%
+        -:   32:        {
+263000000:   33:            ((char*)&G)[i] = floor(Random() * 256);
+263000000:   34:        }
+        -:   35:
+        -:   36:        //randomly selects game variables
+    10000:   37:        player = floor(Random() * MAX_PLAYERS);
+    10000:   38:        G.deckCount[player] = floor(Random() * MAX_DECK);
+    10000:   39:        G.discardCount[player] = floor(Random() * MAX_DECK);
+    10000:   40:        G.handCount[player] = floor(Random() * MAX_HAND);
+    10000:   41:        G.playedCardCount = floor(Random() * (MAX_DECK-1));
+    10000:   42:        G.whoseTurn = player;
+        -:   43:
+        -:   44:        //calls the test function
+    10000:   45:        checkSmithyEffect(player,&G);
+    10000:   46:    }
+        -:   47:
+        -:   48:    //tallies up the total number of fails
+        1:   49:    int totalFails = cardEffectFails + discardCardFails + drawCardFails + deckHandCountFails;
+        -:   50:
+        -:   51:    //displays the results
+        1:   52:    printf("\nRESULTS\n");
+        1:   53:    printf("PASSED: %d\n",iterations - totalFails);
+        1:   54:    printf("FAILED: %d\n",totalFails);
+        -:   55:
+        1:   56:    if (totalFails == 0)
+branch  0 taken 0%
+branch  1 taken 100%
+        -:   57:    {
+    #####:   58:        printf ("RANDOM TEST PASSED\n\n");
+    #####:   59:    }
+        -:   60:    else
+        -:   61:    {
+        1:   62:        printf ("\nRANDOM TEST FAILED\n");
+        1:   63:        printf("\nREPORT\n");
+        1:   64:        printf("drawCard() failed: %d\n",drawCardFails);
+        1:   65:        printf("cardEffect() failed: %d\n",cardEffectFails);
+        1:   66:        printf("discardCard() failed: %d\n",discardCardFails);
+        1:   67:        printf("Hand/Deck Count mismatch: %d\n\n",deckHandCountFails);
+        -:   68:    }
+        -:   69:
+        -:   70:    //coverage is displayed next in the .out so the title is placed here
+        1:   71:    printf ("COVERAGE\n");
+        1:   72:    return 0;
+        -:   73:}
+        -:   74:
+function checkSmithyEffect called 10000 returned 100% blocks executed 42%
+        -:   75:void checkSmithyEffect(int p, struct gameState *post)
+        -:   76:{
+        -:   77:    int r,s,t,u,v;
+        -:   78:
+        -:   79:    //gamestate variable to store previous state
+        -:   80:    struct gameState pre;
+        -:   81:
+        -:   82:    //which is copied into a post state gamestate variable
+    10000:   83:    memcpy(&pre,post,sizeof(struct gameState));
+    10000:   84:    int bonus = 0;
+        -:   85:
+        -:   86:    //call the smithyEffect function
+    10000:   87:    r = cardEffect(smithy,0,0,0,post,0,&bonus);
+        -:   88:
+        -:   89:    //calls draw card 3 times
+    10000:   90:    s = drawCard(p,&pre);
+    10000:   91:    t = drawCard(p,&pre);
+    10000:   92:    u = drawCard(p,&pre);
+        -:   93:
+    10000:   94:    v = discardCard(0, p, &pre, 0);
+        -:   95:
+        -:   96:    //gets the count values for hand and deck
+    10000:   97:    int postHC = post->handCount[p];
+    10000:   98:    int postDC = post->deckCount[p];
+    10000:   99:    int preHC = pre.handCount[p];
+    10000:  100:    int preDC = pre.deckCount[p];
+        -:  101:
+        -:  102:    //checks if any of the drawcards failed
+    10000:  103:    if (s == -1 && pre.deckCount[p] != 0)
+branch  0 taken 0%
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+        -:  104:    {
+    #####:  105:        drawCardFails++;
+    #####:  106:    }
+        -:  107:
+    10000:  108:    if (t == -1 && pre.deckCount[p] != 0)
+branch  0 taken 0%
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+        -:  109:    {
+    #####:  110:        drawCardFails++;
+    #####:  111:    }
+        -:  112:
+    10000:  113:    if (u == -1 && pre.deckCount[p] != 0)
+branch  0 taken 0%
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+        -:  114:    {
+    #####:  115:        drawCardFails++;
+    #####:  116:    }
+        -:  117:
+        -:  118:    //checks if cardeffect and discard failed
+    20000:  119:    if (!(r == 0 && v == 0))
+branch  0 taken 100%
+branch  1 taken 0%
+branch  2 taken 0%
+branch  3 taken 100%
+        -:  120:    {
+    #####:  121:        if (r)
+branch  0 never executed
+branch  1 never executed
+        -:  122:        {
+    #####:  123:            cardEffectFails++;
+    #####:  124:        }
+        -:  125:
+    #####:  126:        if (v)
+branch  0 never executed
+branch  1 never executed
+        -:  127:        {
+    #####:  128:            discardCardFails++;
+    #####:  129:        }
+    #####:  130:    }
+        -:  131:
+        -:  132:    //checks if the hand and deck counts didn't match up
+    10000:  133:    if (!(postHC == preHC && postDC == preDC))
+branch  0 taken 0%
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+        -:  134:    {
+    10000:  135:        deckHandCountFails++;
+    10000:  136:    }
+    10000:  137:}

@@ -1,3 +1,33 @@
+RANDOM TEST - adventurerEffect()
+
+RESULTS
+PASSED: 0
+FAILED: 10000
+
+RANDOM TEST FAILED
+
+REPORT
+shuffle() failed: 0
+drawCard() failed: 0
+cardEffect() failed: 0
+Treasure Count mismatch: 10000
+Hand/Deck Count mismatch: 10000
+
+COVERAGE
+File 'randomtestadventurer.c'
+Lines executed:85.57% of 97
+Branches executed:82.14% of 56
+Taken at least once:69.64% of 56
+No calls
+randomtestadventurer.c:creating 'randomtestadventurer.c.gcov'
+
+File 'dominion.c'
+Lines executed:52.74% of 656
+Branches executed:60.67% of 417
+Taken at least once:47.00% of 417
+No calls
+dominion.c:creating 'dominion.c.gcov'
+
         -:    0:Source:dominion.c
         -:    0:Graph:dominion.gcno
         -:    0:Data:dominion.gcda
