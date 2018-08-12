@@ -64,19 +64,19 @@ branch  1 taken 1%
         1:   54:    printf("FAILED: %d\n",totalFails);
         -:   55:
         1:   56:    if (totalFails == 0)
-branch  0 taken 100%
-branch  1 taken 0%
+branch  0 taken 0%
+branch  1 taken 100%
         -:   57:    {
-        1:   58:        printf ("RANDOM TEST PASSED\n\n");
-        1:   59:    }
+    #####:   58:        printf ("RANDOM TEST PASSED\n\n");
+    #####:   59:    }
         -:   60:    else
         -:   61:    {
-    #####:   62:        printf ("\nRANDOM TEST FAILED\n");
-    #####:   63:        printf("\nREPORT\n");
-    #####:   64:        printf("drawCard() failed: %d\n",drawCardFails);
-    #####:   65:        printf("cardEffect() failed: %d\n",cardEffectFails);
-    #####:   66:        printf("discardCard() failed: %d\n",discardCardFails);
-    #####:   67:        printf("Hand/Deck Count mismatch: %d\n\n",deckHandCountFails);
+        1:   62:        printf ("\nRANDOM TEST FAILED\n");
+        1:   63:        printf("\nREPORT\n");
+        1:   64:        printf("drawCard() failed: %d\n",drawCardFails);
+        1:   65:        printf("cardEffect() failed: %d\n",cardEffectFails);
+        1:   66:        printf("discardCard() failed: %d\n",discardCardFails);
+        1:   67:        printf("Hand/Deck Count mismatch: %d\n\n",deckHandCountFails);
         -:   68:    }
         -:   69:
         -:   70:    //coverage is displayed next in the .out so the title is placed here
@@ -84,7 +84,7 @@ branch  1 taken 0%
         1:   72:    return 0;
         -:   73:}
         -:   74:
-function checkSmithyEffect called 10000 returned 100% blocks executed 42%
+function checkSmithyEffect called 10000 returned 100% blocks executed 47%
         -:   75:void checkSmithyEffect(int p, struct gameState *post)
         -:   76:{
         -:   77:    int r,s,t,u,v;
@@ -163,12 +163,12 @@ branch  1 never executed
     #####:  130:    }
         -:  131:
         -:  132:    //checks if the hand and deck counts didn't match up
-    20000:  133:    if (!(postHC == preHC && postDC == preDC))
-branch  0 taken 100%
-branch  1 taken 0%
+    10001:  133:    if (!(postHC == preHC && postDC == preDC))
+branch  0 taken 1%
+branch  1 taken 99%
 branch  2 taken 0%
 branch  3 taken 100%
         -:  134:    {
-    #####:  135:        deckHandCountFails++;
-    #####:  136:    }
+     9999:  135:        deckHandCountFails++;
+     9999:  136:    }
     10000:  137:}

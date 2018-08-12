@@ -57,14 +57,14 @@ branch  1 taken 1%
     10000:   47:        G.whoseTurn = player;
         -:   48:
         -:   49:        //sets the hand and deck values for the other players
-    80106:   50:        for (i = 0; i < G.numPlayers; i++)
+    80098:   50:        for (i = 0; i < G.numPlayers; i++)
 branch  0 taken 75%
 branch  1 taken 25%
         -:   51:        {
-    30053:   52:            G.deckCount[i] = deckCount;
-    30053:   53:            G.handCount[i] = handCount;
-    30053:   54:            G.discardCount[i] = discardCount;
-    30053:   55:        }
+    30049:   52:            G.deckCount[i] = deckCount;
+    30049:   53:            G.handCount[i] = handCount;
+    30049:   54:            G.discardCount[i] = discardCount;
+    30049:   55:        }
         -:   56:
     10000:   57:        checkCouncilRoomEffect(player,&G);
     10000:   58:    }
@@ -100,7 +100,7 @@ branch  1 taken 0%
         1:   86:    return 0;
         -:   87:}
         -:   88:
-function checkCouncilRoomEffect called 10000 returned 100% blocks executed 59%
+function checkCouncilRoomEffect called 10000 returned 100% blocks executed 65%
         -:   89:void checkCouncilRoomEffect(int p, struct gameState *post)
         -:   90:{
         -:   91:    int r,s,t,u,v,w,x,i;
@@ -124,18 +124,18 @@ function checkCouncilRoomEffect called 10000 returned 100% blocks executed 59%
     10000:  109:    pre.numBuys++;
         -:  110:
         -:  111:    //the other players each draw a card
-    80106:  112:    for (i = 0; i < pre.numPlayers; i++)
+    80098:  112:    for (i = 0; i < pre.numPlayers; i++)
 branch  0 taken 75%
 branch  1 taken 25%
         -:  113:    {
-    30053:  114:        if (i != p)
+    30049:  114:        if (i != p)
 branch  0 taken 67%
 branch  1 taken 33%
         -:  115:        {
-    20053:  116:            w = drawCard(i,&pre);
+    20049:  116:            w = drawCard(i,&pre);
         -:  117:
         -:  118:            //checks if the drawcard failed
-    20053:  119:            if (w == -1 && pre.deckCount[i] != 0)
+    20049:  119:            if (w == -1 && pre.deckCount[i] != 0)
 branch  0 taken 0%
 branch  1 taken 100%
 branch  2 never executed
@@ -143,8 +143,8 @@ branch  3 never executed
         -:  120:            {
     #####:  121:                drawCardFails++;
     #####:  122:            }
-    20053:  123:        }
-    30053:  124:    }
+    20049:  123:        }
+    30049:  124:    }
         -:  125:
     10000:  126:    x = discardCard(0, p, &pre, 0);
         -:  127:
@@ -181,20 +181,20 @@ branch  3 never executed
     #####:  148:        drawCardFails++;
     #####:  149:    }
         -:  150:
-    10000:  151:    if (u == -1 && pre.deckCount[p] != 0)
-branch  0 taken 0%
-branch  1 taken 100%
-branch  2 never executed
-branch  3 never executed
+    10001:  151:    if (u == -1 && pre.deckCount[p] != 0)
+branch  0 taken 1%
+branch  1 taken 99%
+branch  2 taken 0%
+branch  3 taken 100%
         -:  152:    {
     #####:  153:        drawCardFails++;
     #####:  154:    }
         -:  155:
-    10000:  156:    if (v == -1 && pre.deckCount[p] != 0)
-branch  0 taken 0%
-branch  1 taken 100%
-branch  2 never executed
-branch  3 never executed
+    10001:  156:    if (v == -1 && pre.deckCount[p] != 0)
+branch  0 taken 1%
+branch  1 taken 99%
+branch  2 taken 0%
+branch  3 taken 100%
         -:  157:    {
     #####:  158:        drawCardFails++;
     #####:  159:    }
@@ -232,22 +232,22 @@ branch  3 taken 100%
     #####:  179:    }
         -:  180:
         -:  181:    //checks if the other players hand and deck counts matchup or not
-    80106:  182:    for (i = 0; i < pre.numPlayers; i++)
+    80098:  182:    for (i = 0; i < pre.numPlayers; i++)
 branch  0 taken 75%
 branch  1 taken 25%
         -:  183:    {
-    30053:  184:        if (i != p)
+    30049:  184:        if (i != p)
 branch  0 taken 67%
 branch  1 taken 33%
         -:  185:        {
-    40106:  186:            if (!(post->handCount[i] == pre.handCount[i] && post->deckCount[i] == pre.deckCount[i]))
-branch  0 taken 100%
-branch  1 taken 0%
+    33385:  186:            if (!(post->handCount[i] == pre.handCount[i] && post->deckCount[i] == pre.deckCount[i]))
+branch  0 taken 67%
+branch  1 taken 33%
 branch  2 taken 0%
 branch  3 taken 100%
         -:  187:            {
-    #####:  188:                otherPlayerDeckHandFails++;
-    #####:  189:            }
-    20053:  190:        }
-    30053:  191:    }
+     6713:  188:                otherPlayerDeckHandFails++;
+     6713:  189:            }
+    20049:  190:        }
+    30049:  191:    }
     10000:  192:}
