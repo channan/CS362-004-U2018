@@ -43,7 +43,13 @@ public class UrlValidatorTest extends TestCase {
                "oregonstate.edu/about?",
                "as;dfja;lskdjf;aldjf;lksjf;laksj;lfja;ls",
                "http://209.191.122.70/",
-               "http://www.amazon.com/?action=delete"
+               "http://www.amazon.com/?action=delete",
+               "http://1.2.3.400/", //No digit in an ip address should be above 255
+               "1.1.1.1", //Lower bounds should be a valid IP address
+               "1.1.1.255", //Should be a valid IP address
+               "3.3.3.100", //Should be a valid IP address
+               "3.3.3.255", //Should be a valid IP address
+               "3.3.3.256" //Invalid IP address
        ));
 
        ArrayList<String> fails = new ArrayList<>();
@@ -114,7 +120,9 @@ public class UrlValidatorTest extends TestCase {
                "http:www.google.com",
                "http/www.google.com",
                "://www.google.com",
-               "www.google.com"
+               "www.google.com",
+               "http://foo.com/blah_blah", //valid scheme
+               "foo.com" //no scheme
        ));
 
        ArrayList<String> fails = new ArrayList<>();
@@ -195,7 +203,9 @@ public class UrlValidatorTest extends TestCase {
                "http://aaa.",
                "http://.aaa",
                "http://aaa",
-               "http://"
+               "http://",
+               "http://fo o.bar", //invalid authority
+               "http://foo.bar" //valid authority
        ));
 
        ArrayList<String> fails = new ArrayList<>();
@@ -399,7 +409,9 @@ public class UrlValidatorTest extends TestCase {
         ArrayList<String> urls = new ArrayList<>(Arrays.asList(
                 "http://www.google.com/test1?action=view",
                 "http://www.google.com/test1?action=edit&mode=up",
-                "http://www.google.com/test1"
+                "http://www.google.com/test1",
+                "http://example.com/foo/foo/foo?bar/bar/bar", //with query
+                "http://example.com/foo/foo/foo?ba r/bar/bar" //invalid query
         ));
 
         ArrayList<String> fails = new ArrayList<>();
@@ -454,13 +466,13 @@ public class UrlValidatorTest extends TestCase {
     }
 
     @Test
-   public void testIsValid()
+   public void testIsValidRandom()
    {
 	   //You can use this function for programming based testing
        UrlValidator url = new UrlValidator();
        UrlValidator urlAllowAll = new UrlValidator(null,null,UrlValidator.ALLOW_ALL_SCHEMES);
 
-       int numTests=30;
+       int numTests=10000;
        int i=0;
        LinkedHashMap<String, Boolean> urls = new LinkedHashMap<>();
        //ArrayList<String> urls = new ArrayList<>();
@@ -550,6 +562,34 @@ public class UrlValidatorTest extends TestCase {
        }
 
    }
+
+    public void testIsValid()
+    {
+        //You can use this function for programming based testing
+
+        UrlValidator url1 = new UrlValidator(null, null, UrlValidator.ALLOW_2_SLASHES);
+        UrlValidator url2 = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+        UrlValidator url = new UrlValidator();
+
+        String testurl;
+        Boolean result;
+
+        for(Map.Entry<String, Boolean> scheme : testUrlScheme().entrySet()){
+            for(Map.Entry<String, Boolean> authority : testUrlAuthority().entrySet()){
+                for(Map.Entry<String, Boolean> port : testUrlPort().entrySet()){
+                    for(Map.Entry<String, Boolean> path : testUrlPath().entrySet()){
+                        for(Map.Entry<String, Boolean> query : testUrlQuery().entrySet()){
+                            testurl = scheme.getKey() + authority.getKey() + port.getKey() + path.getKey() + query.getKey();
+                            result = scheme.getValue() & authority.getValue() & port.getValue() & path.getValue() & query.getValue();
+                            assertEquals(testurl,result.booleanValue(),url.isValid(testurl));
+                            assertEquals(testurl,result.booleanValue(),url1.isValid(testurl));
+                            assertEquals(testurl,result.booleanValue(),url2.isValid(testurl));
+                        }
+                    }
+                }
+            }
+        }
+    }
 
    public LinkedHashMap<String,Boolean> testUrlScheme() {
        LinkedHashMap<String, Boolean> map = new LinkedHashMap<>();
