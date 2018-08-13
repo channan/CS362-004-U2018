@@ -14,92 +14,126 @@ public class UrlValidatorTest extends TestCase {
    }
 
     @Test
-   public void testIsValidRandom()
-   {
-       UrlValidator url = new UrlValidator();
-       UrlValidator urlAllowAll = new UrlValidator(null,null,UrlValidator.ALLOW_ALL_SCHEMES);
+   public void testIsValidRandomDefault() {
+        UrlValidator url = new UrlValidator();
 
-       int numTests=10000;
-       int i=0;
-       int inconsistency = 0;
-       LinkedHashMap<String, Boolean> urls = new LinkedHashMap<>();
-       Random rand = new Random();
+        int numTests = 10000;
+        int i = 0;
+        int inconsistency = 0;
+        LinkedHashMap<String, Boolean> urls = new LinkedHashMap<>();
+        Random rand = new Random();
 
-       while(i<numTests){
-           int pos = rand.nextInt(testUrlScheme().size());
-           String schemeString = (new ArrayList<>(testUrlScheme().keySet())).get(pos);
-           Boolean schemeBool = (new ArrayList<>(testUrlScheme().values())).get(pos);
+        while (i < numTests) {
+            int pos = rand.nextInt(testUrlScheme().size());
+            String schemeString = (new ArrayList<>(testUrlScheme().keySet())).get(pos);
+            Boolean schemeBool = (new ArrayList<>(testUrlScheme().values())).get(pos);
 
-           pos = rand.nextInt(testUrlAuthority().size());
-           String authorityString = (new ArrayList<>(testUrlAuthority().keySet())).get(pos);
-           Boolean authorityBool = (new ArrayList<>(testUrlAuthority().values())).get(pos);
+            pos = rand.nextInt(testUrlAuthority().size());
+            String authorityString = (new ArrayList<>(testUrlAuthority().keySet())).get(pos);
+            Boolean authorityBool = (new ArrayList<>(testUrlAuthority().values())).get(pos);
 
-           pos = rand.nextInt(testUrlPort().size());
-           String portString = (new ArrayList<>(testUrlPort().keySet())).get(pos);
-           Boolean portBool = (new ArrayList<>(testUrlPort().values())).get(pos);
+            pos = rand.nextInt(testUrlPort().size());
+            String portString = (new ArrayList<>(testUrlPort().keySet())).get(pos);
+            Boolean portBool = (new ArrayList<>(testUrlPort().values())).get(pos);
 
-           pos = rand.nextInt(testUrlPath().size());
-           String pathString = (new ArrayList<>(testUrlPath().keySet())).get(pos);
-           Boolean pathBool = (new ArrayList<>(testUrlPath().values())).get(pos);
+            pos = rand.nextInt(testUrlPath().size());
+            String pathString = (new ArrayList<>(testUrlPath().keySet())).get(pos);
+            Boolean pathBool = (new ArrayList<>(testUrlPath().values())).get(pos);
 
-           pos = rand.nextInt(testUrlQuery().size());
-           String queryString = (new ArrayList<>(testUrlQuery().keySet())).get(pos);
-           Boolean queryBool = (new ArrayList<>(testUrlQuery().values())).get(pos);
+            pos = rand.nextInt(testUrlQuery().size());
+            String queryString = (new ArrayList<>(testUrlQuery().keySet())).get(pos);
+            Boolean queryBool = (new ArrayList<>(testUrlQuery().values())).get(pos);
 
-           String urlString = schemeString + authorityString + portString + pathString + queryString;
-           Boolean expected = schemeBool & authorityBool & portBool & pathBool & queryBool;
+            String urlString = schemeString + authorityString + portString + pathString + queryString;
+            Boolean expected = schemeBool & authorityBool & portBool & pathBool & queryBool;
 
-           urls.put(urlString,expected);
-           i++;
-       }
+            urls.put(urlString, expected);
+            i++;
+        }
 
-       LinkedHashMap<String, Boolean> passes = new LinkedHashMap<>();
-       LinkedHashMap<String, Boolean> fails = new LinkedHashMap<>();
+        LinkedHashMap<String, Boolean> passes = new LinkedHashMap<>();
+        LinkedHashMap<String, Boolean> fails = new LinkedHashMap<>();
 
-       System.out.println("Testing urls using default url validator...");
-       for(Map.Entry<String, Boolean> entry : urls.entrySet()){
-           try{
-               assertEquals(entry.getValue().booleanValue(),url.isValid(entry.getKey()));
-               passes.put(entry.getKey(),entry.getValue());
-           }catch(Error e){
-               fails.put(entry.getKey(),entry.getValue());
-           }
-       }
+        System.out.println("Testing urls using default url validator...");
+        for (Map.Entry<String, Boolean> entry : urls.entrySet()) {
+            try {
+                assertEquals(entry.getValue().booleanValue(), url.isValid(entry.getKey()));
+                passes.put(entry.getKey(), entry.getValue());
+            } catch (Error e) {
+                fails.put(entry.getKey(), entry.getValue());
+            }
+        }
 
-       System.out.println("Passing urls:");
-       for(Map.Entry<String, Boolean> entry : passes.entrySet()){
-           System.out.println(entry.getKey()+ " --> " + entry.getValue());
-       }
+        System.out.println("Passing urls:");
+        for (Map.Entry<String, Boolean> entry : passes.entrySet()) {
+            System.out.println(entry.getKey() + " --> " + entry.getValue());
+        }
 
-       System.out.println("");
-       System.out.println("Failing urls:");
-       for(Map.Entry<String, Boolean> entry : fails.entrySet()){
-           System.out.println(entry.getKey()+ " --> " + entry.getValue());
-       }
+        System.out.println("");
+        System.out.println("Failing urls:");
+        for (Map.Entry<String, Boolean> entry : fails.entrySet()) {
+            System.out.println(entry.getKey() + " --> " + entry.getValue());
+        }
 
-       System.out.println("");
-       System.out.println("Inconsistencies:");
-       for(Map.Entry<String, Boolean> entry : passes.entrySet()){
-           if(!entry.getValue()){
-               System.out.println(entry.getKey()+ " --> " + entry.getValue());
-               inconsistency++;
-           }
-       }
-       for(Map.Entry<String, Boolean> entry : fails.entrySet()){
-           if(entry.getValue()){
-               System.out.println(entry.getKey()+ " --> " + entry.getValue());
-               inconsistency++;
-           }
-       }
+        System.out.println("");
+        System.out.println("Inconsistencies:");
+        for (Map.Entry<String, Boolean> entry : passes.entrySet()) {
+            if (!entry.getValue()) {
+                System.out.println(entry.getKey() + " --> " + entry.getValue());
+                inconsistency++;
+            }
+        }
+        for (Map.Entry<String, Boolean> entry : fails.entrySet()) {
+            if (entry.getValue()) {
+                System.out.println(entry.getKey() + " --> " + entry.getValue());
+                inconsistency++;
+            }
+        }
 
-       System.out.println("");
-       System.out.println("There were " + inconsistency + " wrong validations of " + numTests + "!");
+        System.out.println("");
+        System.out.println("There were " + inconsistency + " wrong validations of " + numTests + "!");
+    }
 
-       System.out.println(" ");
+    @Test
+    public void testIsValidRandomAllowAllSchemes() {
+        UrlValidator urlAllowAll = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
-       passes.clear();
-       fails.clear();
-       inconsistency=0;
+        int numTests = 10000;
+        int i = 0;
+        int inconsistency = 0;
+        LinkedHashMap<String, Boolean> urls = new LinkedHashMap<>();
+        Random rand = new Random();
+
+        while (i < numTests) {
+            int pos = rand.nextInt(testUrlScheme().size());
+            String schemeString = (new ArrayList<>(testUrlScheme().keySet())).get(pos);
+            Boolean schemeBool = (new ArrayList<>(testUrlScheme().values())).get(pos);
+
+            pos = rand.nextInt(testUrlAuthority().size());
+            String authorityString = (new ArrayList<>(testUrlAuthority().keySet())).get(pos);
+            Boolean authorityBool = (new ArrayList<>(testUrlAuthority().values())).get(pos);
+
+            pos = rand.nextInt(testUrlPort().size());
+            String portString = (new ArrayList<>(testUrlPort().keySet())).get(pos);
+            Boolean portBool = (new ArrayList<>(testUrlPort().values())).get(pos);
+
+            pos = rand.nextInt(testUrlPath().size());
+            String pathString = (new ArrayList<>(testUrlPath().keySet())).get(pos);
+            Boolean pathBool = (new ArrayList<>(testUrlPath().values())).get(pos);
+
+            pos = rand.nextInt(testUrlQuery().size());
+            String queryString = (new ArrayList<>(testUrlQuery().keySet())).get(pos);
+            Boolean queryBool = (new ArrayList<>(testUrlQuery().values())).get(pos);
+
+            String urlString = schemeString + authorityString + portString + pathString + queryString;
+            Boolean expected = schemeBool & authorityBool & portBool & pathBool & queryBool;
+
+            urls.put(urlString, expected);
+            i++;
+        }
+
+        LinkedHashMap<String, Boolean> passes = new LinkedHashMap<>();
+        LinkedHashMap<String, Boolean> fails = new LinkedHashMap<>();
 
        System.out.println("Testing urls using url validator that allows all schemes...");
        for(Map.Entry<String, Boolean> entry : urls.entrySet()){
